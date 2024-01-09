@@ -10,43 +10,42 @@
 </head>
 
 <body>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        {% if 'user_username' in session %}
-                        <a class="navbar-brand" href="/username/{{session['user_username']}}">Feedback</a>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">Logout</a>
-                        </li>
-                        {% else %}
-                        <a class="navbar-brand" href="/login">Feedback</a>
-                        <li class=" nav-item">
-                            <a class="nav-link active" aria-current="page" href="/register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <!--           
+    <!-- <div class="container"> -->
+    <!-- navbar-expand-lg bg-body-tertiary -->
+    <nav class="navbar navbar-light bg-primary justify-content-between">
+        <div class="container">
+            <ul class="nav navbar-nav flex-row float-right">
+                {% if 'user_username' in session %}
+                <a class="navbar-brand text-light" href="/username/{{session['user_username']}}">Feedback</a>
+                <li class="nav-item">
+                    <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+                </li>
+                {% else %}
+                <a class="navbar-brand text-light" href="/login">Feedback</a>
+                <li class=" nav-item">
+                    <a class="nav-link pr-3 text-light" href="/register">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pr-3 text-light" href="/login">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!--           
             <a class="navbar-brand" href="/">Feedback</a>
             <a href="/register">Register</a>
             <a href="/login">Login</a>
          -->
-        </nav>
-    </div>
+    </nav>
+    <!-- </div> -->
 
 
     <!-- Since we're using bootstrap. Added class='container' so taht all of our 
     html templates will have container and be centered on the screen -->
     <div class="container" style="margin-top: 2em">
 
-        {% for msg in get_flashed_messages() %}
-        <div class="alert alert-danger">{{ msg }}</div>
+        {% for category, msg in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{category}}">{{ msg }}</div>
         {% endfor %}
         <!-- {% for category, msg in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{category}}">{{ msg }}</div>

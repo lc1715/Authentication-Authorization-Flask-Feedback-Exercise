@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Show user's personal information -->
-<h3>User Information</h3>
+<h2>User Information</h2>
 
 <p>Username: {{user_obj.username}}</p>
 
@@ -14,7 +14,49 @@
 
 
 <!-- Show user's feedbacks -->
+<!-- 
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div> -->
+<!-- Show user's feedbacks -->
+
+<h2>{{user_obj.username}}'s feedbacks</h2>
 {% if feedbacks%}
+
+{% for feedback in feedbacks %}
+
+<div class="card my-4" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title text-info">{{feedback.title}}</h5>
+        <p class="card-text">{{feedback.content}}</p>
+        <a href="/feedback/{{feedback.id}}/update" class="card-link">Edit</a>
+        <form style="display: inline;" action="/feedback/{{feedback.id}}/delete" method="POST">
+            <button>X</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+{% endif %}
+
+<!-- Link to add feedback -->
+<a class="btn btn-info btn-md" href="/username/{{user_obj.username}}/feedback/add">Add
+    Feedback</a>
+<form style="display: inline;" action="/users/{{user_obj.username}}/delete">
+    <button class="btn btn-info btn-md">Delete User</button>
+</form>
+
+{% endblock %}
+
+<!-- Show user's feedbacks -->
+<!-- {% if feedbacks%}
 <ul>
     {% for feedback in feedbacks %}
     <li>{{feedback.title}} - {{feedback.content}}
@@ -25,12 +67,4 @@
     </li>
     {% endfor %}
 </ul>
-{% endif %}
-
-<!-- Link to add feedback -->
-<a href="/username/{{user_obj.username}}/feedback/add">Add Feedback</a>
-<form action="/users/{{user_obj.username}}/delete">
-    <button>Delete User</button>
-</form>
-
-{% endblock %}
+{% endif %} -->

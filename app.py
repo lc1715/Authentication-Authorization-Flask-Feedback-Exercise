@@ -20,13 +20,16 @@ toolbar = DebugToolbarExtension(app)
 
 @app.route('/')
 def homepage():
+    """Homepage of site, redirect to '/register'"""
     return redirect('/register')
 
 @app.route('/username/<username>/feedback/add', methods=['GET', 'POST'])
 def add_feedback(username):
+    """Allow a user to add feedback, show user's page"""
+
     # Check that the user is logged in before she can add feedback
     if 'user_username' not in session:
-        flash('Please register or login first!')
+        flash('Please register or login first!', 'success')
         return redirect('/register')
     
     ###GET request####
@@ -52,9 +55,15 @@ def edit_feedback(feedback_id):
     form = FeedbackForm()
 
     feedback = Feedback.query.get_or_404(feedback_id)
+    # form = FeedbackForm(obj=feedback)
+    # I could have just put this line, form = FeedbackForm(obj=feedback), right 
+    # after getting the feedback object out in the above line and then prefill in
+    # the form, FeedbackForm, to what was originally in that feedback object. So 
+    # in other words, I could have done this instead of in hte edit_feedback.html template.
+    # {{form.title(class_="form-control", value=feedback.title)}}
 
     if 'user_username' not in session:
-        flash('Please register or login first!')
+        flash('Please register or login first!', 'info')
         return redirect('/register')
         # If there is no user logged in then he needs to log in first before he can view the update form
 
@@ -68,7 +77,7 @@ def edit_feedback(feedback_id):
             db.session.commit()
             return redirect(f'/username/{feedback.user.username}')
         else: 
-            flash("You don't have persmission to do that!")
+            flash("You don't have persmission to do that!", 'primary')
         # If the owner of the feedback is the same user that is logged in, 
         # then we will allow him to update the feedback.
     return render_template('edit_feedback.html', form=form, feedback=feedback )
@@ -82,7 +91,7 @@ def delete_feedback(feedback_id):
         db.session.commit()
         return redirect(f"/username/{session['user_username']}")
     
-    flash("You don't have permission to do that!")
+    flash("You don't have permission to do that!", 'danger')
     return redirect('/login')    
 
 
@@ -90,7 +99,7 @@ def delete_feedback(feedback_id):
 def users_info(username):
     # Check that the user is logged in and registered before she can view her info
     if 'user_username' not in session:
-        flash('Please register or login first!')
+        flash('Please register or login first!', 'success')
         return redirect('/register')
     
     # user_obj = User.query.filter_by(username=username)
@@ -113,7 +122,7 @@ def delete_user(username):
         session.pop('user_username')
         return redirect('/register')
     else: 
-        flash("You don't have permission to do that!")
+        flash("You don't have permission to do that!", 'danger')
     return redirect('/register')
 
 
@@ -139,7 +148,7 @@ def register_user():
 
         session['user_username'] = new_user.username
 
-        flash('Welcome! Successfully created your account!')
+        flash('Welcome! Successfully created your account!', 'info')
         return redirect(f'/username/{username}')
     
     return render_template('register.html', form=form)
@@ -159,7 +168,7 @@ def login_user():
         # if user_obj and session['user_username'] == user_obj.username:
         if user_obj:
             session['user_username'] = user_obj.username
-            flash(f'Welcome back, {user_obj.username}')
+            flash(f'Welcome back, {user_obj.username}', 'success')
             return redirect(f'/username/{user_obj.username}')
         else:
             form.username.errors = ['Invalid username/password']
@@ -169,5 +178,5 @@ def login_user():
 @app.route('/logout')
 def logout_user():
     session.pop('user_username')
-    flash('You are logged out')
+    flash('You are logged out', 'info')
     return redirect('/login')
