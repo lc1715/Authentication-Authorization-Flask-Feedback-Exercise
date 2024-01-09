@@ -1,24 +1,17 @@
 <form method="POST">
-    <!-- This is our CSRF Token -->
     {{form.hidden_tag()}}
 
-    <!-- Only show the fields that are not hidden. Cause CSRF Token field is hidden-->
     {% for field in form
     if field.widget.input_type != 'hidden' %}
 
-    <!-- Show the label, input field, and any errors -->
     <p>
         {{field.label}}
-        <!-- Can add a class to our fields with (class_='form-control') -->
+
         {{field(class_='form-control')}}
 
-        <!-- If there are any errors inside the form object, (i.e form.username.errors,
-        form.password.errors, form.id.errors), then it will be printed out here -->
         {% for error in field.errors %}
-        <!-- The class makes the error message red -->
         <span class="form-text text-danger">{{error}}</span>
         {% endfor %}
-
     </p>
     {% endfor %}
 

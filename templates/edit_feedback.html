@@ -1,4 +1,3 @@
-<!-- form=form, feedback=feedback  -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -7,22 +6,15 @@
 <p>Edit your feedback below</p>
 
 <form action="/feedback/{{feedback.id}}/update" method="POST">
-    <!-- Don't need to include the action="". I just put it there so easier for me to read and see. -->
-
-    <!-- Hidden CSRF Token -->
     {{form.hidden_tag()}}
 
-    <!-- To style each input and label element separately -->
-    <!-- label element -->
     {{form.title.label(class_='text-success')}}
-    <!-- input element -->
+
     {{form.title(class_="form-control", value=feedback.title)}}
 
-    <!-- label element -->
     {{form.content.label(class_='text-success mt-3')}}
-    <!-- input element -->
-    {{form.content(class_="form-control", value=feedback.content)}}
 
+    {{form.content(class_="form-control", value=feedback.content)}}
 
     <button class="btn btn-success mt-4" type="submit">Submit</button>
 </form>

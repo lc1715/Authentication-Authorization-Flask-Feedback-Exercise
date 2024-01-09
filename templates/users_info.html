@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Show user's personal information -->
 <h2>User Information</h2>
 
 <p>Username: {{user_obj.username}}</p>
@@ -14,19 +13,6 @@
 
 
 <!-- Show user's feedbacks -->
-<!-- 
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.</p>
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
-    </div>
-</div> -->
-<!-- Show user's feedbacks -->
-
 <h2>{{user_obj.username}}'s feedbacks</h2>
 {% if feedbacks%}
 
@@ -54,17 +40,3 @@
 </form>
 
 {% endblock %}
-
-<!-- Show user's feedbacks -->
-<!-- {% if feedbacks%}
-<ul>
-    {% for feedback in feedbacks %}
-    <li>{{feedback.title}} - {{feedback.content}}
-        <a href="/feedback/{{feedback.id}}/update">Edit</a>
-        <form action="/feedback/{{feedback.id}}/delete" method="POST">
-            <button>X</button>
-        </form>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %} -->

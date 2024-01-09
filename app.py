@@ -21,13 +21,13 @@ toolbar = DebugToolbarExtension(app)
 @app.route('/')
 def homepage():
     """Homepage of site, redirect to '/register'"""
+
     return redirect('/register')
 
 @app.route('/username/<username>/feedback/add', methods=['GET', 'POST'])
 def add_feedback(username):
     """Allow a user to add feedback, show user's page"""
 
-    # Check that the user is logged in before she can add feedback
     if 'user_username' not in session:
         flash('Please register or login first!', 'success')
         return redirect('/register')
@@ -51,21 +51,15 @@ def add_feedback(username):
 
 @app.route('/feedback/<int:feedback_id>/update', methods=['GET', 'POST'])
 def edit_feedback(feedback_id):
+
     ##Get request###########
     form = FeedbackForm()
 
     feedback = Feedback.query.get_or_404(feedback_id)
-    # form = FeedbackForm(obj=feedback)
-    # I could have just put this line, form = FeedbackForm(obj=feedback), right 
-    # after getting the feedback object out in the above line and then prefill in
-    # the form, FeedbackForm, to what was originally in that feedback object. So 
-    # in other words, I could have done this instead of in hte edit_feedback.html template.
-    # {{form.title(class_="form-control", value=feedback.title)}}
 
     if 'user_username' not in session:
         flash('Please register or login first!', 'info')
         return redirect('/register')
-        # If there is no user logged in then he needs to log in first before he can view the update form
 
     ##POST request#####
     if form.validate_on_submit():
@@ -78,9 +72,8 @@ def edit_feedback(feedback_id):
             return redirect(f'/username/{feedback.user.username}')
         else: 
             flash("You don't have persmission to do that!", 'primary')
-        # If the owner of the feedback is the same user that is logged in, 
-        # then we will allow him to update the feedback.
     return render_template('edit_feedback.html', form=form, feedback=feedback )
+
 
 @app.route('/feedback/<int:feedback_id>/delete', methods=['POST'])
 def delete_feedback(feedback_id):
@@ -97,24 +90,21 @@ def delete_feedback(feedback_id):
 
 @app.route('/username/<username>', methods=['GET', 'POST'])
 def users_info(username):
-    # Check that the user is logged in and registered before she can view her info
     if 'user_username' not in session:
         flash('Please register or login first!', 'success')
         return redirect('/register')
-    
-    # user_obj = User.query.filter_by(username=username)
+
     user_obj = User.query.filter_by(username=username).first()
 
     if user_obj.feedbacks:
-        feedbacks = user_obj.feedbacks  #[<Feedback 1>, <Feedback 2>] - a list of feedbacks objects
+        feedbacks = user_obj.feedbacks  
         return render_template('users_info.html', user_obj=user_obj, feedbacks=feedbacks)
     return render_template('users_info.html', user_obj=user_obj)
-                           
+
+
 @app.route('/users/<username>/delete')
 def delete_user(username):
-    # user = User.query.filter_by(username=username)
     user = User.query.filter_by(username=username).first()
-    # raise
 
     if user.username == session['user_username']:
         db.session.delete(user)
@@ -140,7 +130,7 @@ def register_user():
         first_name = form.first_name.data
         last_name = form.last_name.data
 
-        hashed_user_obj = User.register(username, password)  # {username:'LizTheCat', password:'hashed pwd'}
+        hashed_user_obj = User.register(username, password)  
         new_user = User(username=hashed_user_obj[username], password=hashed_user_obj[password], email=email, first_name=first_name, last_name=last_name)
 
         db.session.add(new_user)
@@ -163,9 +153,8 @@ def login_user():
         username = form.username.data
         password = form.password.data
 
-        user_obj = User.authenticate(username=username, password=password) #{username:'LizTheCat', password:'hashed pwd', email:'liz24@gmail.com', first_name:"Elizabeth", last_name:'Lin'.}
+        user_obj = User.authenticate(username=username, password=password) 
 
-        # if user_obj and session['user_username'] == user_obj.username:
         if user_obj:
             session['user_username'] = user_obj.username
             flash(f'Welcome back, {user_obj.username}', 'success')
